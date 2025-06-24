@@ -13,7 +13,7 @@ def get_requirements() -> List[str]:
     return requirements
 
 setup(
-    name = "hest-Cancer-Classification-App",
+    name = "Chest-Cancer-Classification-App",
     version = "0.0.0",
     author = "ArpitKadam",
     author_email="arpitkadam922@gmail.com",
