@@ -27,6 +27,7 @@ files = [
     ".dockerignore",
     "demo.py",
     "setup.py",
+    "params.yaml"
     "config/model.yaml",
     "config/schema.yaml",
     "config/config.yaml",
