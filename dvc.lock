@@ -12,11 +12,10 @@ stages:
       md5: 3ed9514080a0d0bfc22482b100e8a06f
       size: 2035
     outs:
-    - path: artifacts/data_ingestion
+    - path: artifacts/data_ingestion/data.zip
       hash: md5
-      md5: 6b22cd66e16fbd1fe3e1f887277ae914.dir
-      size: 249168907
-      nfiles: 1001
+      md5: 5fed94b5dd156b159d1ccd37262ce9cb
+      size: 124212109
   prepare_base_model:
     cmd: python src/components/base_model.py
     deps:
@@ -41,7 +40,7 @@ stages:
     outs:
     - path: artifacts/base_model
       hash: md5
-      md5: 1f694f9d7752606815b8b11081720735.dir
+      md5: 23a1bcc43d8141984c503bdb54207ec0.dir
       size: 160752576
       nfiles: 2
   training:
@@ -49,14 +48,9 @@ stages:
     deps:
     - path: artifacts/base_model
       hash: md5
-      md5: 1f694f9d7752606815b8b11081720735.dir
+      md5: 23a1bcc43d8141984c503bdb54207ec0.dir
       size: 160752576
       nfiles: 2
-    - path: artifacts/data_ingestion/Data
-      hash: md5
-      md5: 3ddc2c0e262e947578d73eeec3119af6.dir
-      size: 124956798
-      nfiles: 1000
     - path: config/config.yaml
       hash: md5
       md5: 0ec8ee8a77e4ae28f8c8990d260d1efe
@@ -75,22 +69,16 @@ stages:
         - 224
         - 3
     outs:
-    - path: artifacts/model_trainer
+    - path: artifacts/model_trainer/trained_model.h5
       hash: md5
-      md5: a49f849afcb5b358649040b993e3d32a.dir
-      size: 80694425
-      nfiles: 4
+      md5: d62d6011699222350da24821532c0e50
+      size: 80586064
   evaluation:
     cmd: python src/components/model_evaluation.py
     deps:
-    - path: artifacts/data_ingestion/Data/test
-      hash: md5
-      md5: e0a2c120e6f96a38d0407e5cde8d5b8b.dir
-      size: 43286575
-      nfiles: 315
     - path: artifacts/model_trainer/trained_model.h5
       hash: md5
-      md5: 782d26ec53c415343a47a2c354041c6e
+      md5: d62d6011699222350da24821532c0e50
       size: 80586064
     - path: config/config.yaml
       hash: md5
@@ -110,5 +98,5 @@ stages:
     outs:
     - path: artifacts/model_evaluation/evaluation_scores.json
       hash: md5
-      md5: fbebb8f50afae48abdd97ec3b83d3755
+      md5: a6e95e69fa390411de4181810662aff2
       size: 73

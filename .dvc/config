@@ -1,0 +1,6 @@
+[core]
+    remote = chest-cancer-classification-app
+['remote "chest-cancer-classification-app"']
+    url = https://dagshub.com/ArpitKadam/Chest-Cancer-Classification-App.dvc
+    user = ArpitKadam
+    auth = basic
