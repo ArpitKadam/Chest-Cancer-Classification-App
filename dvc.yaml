@@ -1,0 +1,54 @@
+stages:
+  data_ingestion:
+    cmd: python src/components/data_ingestion.py
+    deps:
+      - src/components/data_ingestion.py
+      - config/config.yaml
+    outs:
+      - artifacts/data_ingestion
+
+
+  prepare_base_model:
+    cmd: python src/components/base_model.py
+    deps:
+      - src/components/base_model.py
+      - config/config.yaml
+    params:
+      - IMAGE_SIZE
+      - INCLUDE_TOP
+      - CLASSES
+      - WEIGHTS
+      - LEARNING_RATE
+    outs:
+      - artifacts/base_model
+
+
+  training:
+    cmd: python src/components/model_trainer.py
+    deps:
+      - src/components/model_trainer.py
+      - config/config.yaml
+      - artifacts/data_ingestion/Data
+      - artifacts/base_model
+    params:
+      - IMAGE_SIZE
+      - EPOCHS
+      - BATCH_SIZE
+      - AUGMENTATION
+    outs:
+      - artifacts/model_trainer
+
+
+  evaluation:
+    cmd: python src/components/model_evaluation.py
+    deps:
+      - src/components/model_evaluation.py
+      - config/config.yaml
+      - artifacts/data_ingestion/Data/test
+      - artifacts/model_trainer/trained_model.h5
+    params:
+      - IMAGE_SIZE
+      - BATCH_SIZE
+    metrics:
+    - artifacts/model_evaluation/evaluation_scores.json:
+        cache: false
