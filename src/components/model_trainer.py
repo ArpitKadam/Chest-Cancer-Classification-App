@@ -7,6 +7,7 @@ from src.entity.config_entity import ModelTrainerConfig
 from pathlib import Path
 from src.utils import create_directories, save_json
 import matplotlib.pyplot as plt
+from src.configuration.configuration import AppConfig
 
 class ModelTrainer:
     def __init__(self, config: ModelTrainerConfig):
@@ -151,4 +152,17 @@ class ModelTrainer:
         except Exception as e:
             logger.error(e)
             raise CustomException(e, sys)
+
+if __name__ == "__main__":
+    try:
+        config = AppConfig()
+        trainer_config = config.get_model_trainer_config()
+        training = ModelTrainer(config=trainer_config)
+        training.get_model()
+        training.get_data_for_training()
+        training.train()
+        training.save_training_metrics()
+
+    except Exception as e:
+        raise CustomException(e, sys)
     

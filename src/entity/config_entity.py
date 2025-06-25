@@ -38,3 +38,17 @@ class ModelTrainerConfig:
     loss_images_path: Path
     accuracy_images_path: Path
     history_json_path: Path
+
+@dataclass(frozen=True)
+class EvaluationConfig:
+    score_file: Path
+    model_path: Path
+    train_data_path: Path
+    test_data_path: Path
+    all_params: dict
+    mlflow_uri: str
+    image_size: list
+    batch_size: int
+    loss_images_path: Path
+    accuracy_images_path: Path
+    history_json_path: Path

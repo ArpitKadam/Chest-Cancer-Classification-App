@@ -2,6 +2,7 @@ from src.logger import logger
 from src.exception import CustomException
 import sys
 import tensorflow as tf
+from src.configuration.configuration import AppConfig
 from src.entity.config_entity import PrepareBaseModelConfig
 from pathlib import Path
 
@@ -90,3 +91,14 @@ class PrepareBaseModel:
         except Exception as e:
             logger.error(e)
             raise CustomException(e, sys)
+
+if __name__ == "__main__":
+    try:
+        config = AppConfig()
+        prepare_base_model = config.get_base_model_config()
+        prepare_base_model =  PrepareBaseModel(config=prepare_base_model)
+        prepare_base_model.download_base_mode()
+        prepare_base_model.update_base_model()
+        
+    except Exception as e:
+        raise CustomException(e, sys)

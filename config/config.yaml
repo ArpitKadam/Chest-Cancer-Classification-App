@@ -21,3 +21,11 @@ model_trainer:
   loss_images_path: artifacts/model_trainer/model_history/loss_image.png
   accuracy_images_path: artifacts/model_trainer/model_history/accuracy_image.png
   history_json_path: artifacts/model_trainer/model_history/model_history.json
+
+model_evaluation:
+  root_dir: artifacts/model_evaluation
+  trained_model_path: artifacts/model_trainer/trained_model.h5
+  train_data_path: artifacts/data_ingestion/Data/train
+  valid_data_path: artifacts/data_ingestion/Data/valid
+  test_data_path: artifacts/data_ingestion/Data/test
+  score_file: artifacts/model_evaluation/evaluation_scores.json

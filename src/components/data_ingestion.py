@@ -1,7 +1,7 @@
 from src.logger import logger
 from src.exception import CustomException
 import gdown
-import os, sys
+import sys
 import zipfile
 from src.configuration.configuration import AppConfig
 from src.entity.config_entity import DataIngestionConfig
@@ -43,3 +43,14 @@ class DataIngestion:
         except Exception as e:
             logger.error(e)
             raise CustomException(e, sys)
+
+if __name__ == "__main__":
+    try:
+        config = AppConfig()
+        data_ingestion_config = config.get_data_ingestion_config()
+        data_ingestion_obj = DataIngestion(config=data_ingestion_config)
+        data_ingestion_obj.download_data()
+        data_ingestion_obj.unzip_data()
+
+    except Exception as e:
+        raise CustomException(e, sys)

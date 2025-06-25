@@ -2,9 +2,9 @@ from src.logger import logger
 from src.exception import CustomException
 from src.constants import CONFIG_FILE_PATH, PARAMS_FILE_PATH
 from src.utils import create_directories, read_yaml
-from src.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig, ModelTrainerConfig
+from src.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig, ModelTrainerConfig, EvaluationConfig
 from pathlib import Path
-import sys
+import sys, os
 
 class AppConfig:
     def __init__(self):
@@ -103,6 +103,35 @@ class AppConfig:
             logger.info(f"Model Trainer Config: {model_trainer_config}")
             
             return model_trainer_config
+    
+        except Exception as e:
+            logger.error(e)
+            raise CustomException(e, sys)
+    
+    def get_evaluation_config(self) -> EvaluationConfig:
+        try:
+            config = self.config.model_evaluation
+            trainer_config = self.config.model_trainer
+
+            create_directories([config.root_dir])              ### Now always pass path to this function as list
+            logger.info(f"Evaluation directory created at {config.root_dir}")
+
+            evaluation_config = EvaluationConfig(
+                score_file=config.score_file, 
+                model_path=config.trained_model_path,
+                train_data_path=config.train_data_path,
+                test_data_path=config.test_data_path,
+                all_params=self.params,
+                mlflow_uri=os.environ.get("MLFLOW_TRACKING_URI"),
+                image_size=self.params.IMAGE_SIZE,
+                batch_size=self.params.BATCH_SIZE,
+                loss_images_path=trainer_config.loss_images_path,
+                accuracy_images_path=trainer_config.accuracy_images_path,
+                history_json_path=trainer_config.history_json_path
+            )
+            logger.info(f"Evaluation Config: {evaluation_config}")
+            
+            return evaluation_config
     
         except Exception as e:
             logger.error(e)

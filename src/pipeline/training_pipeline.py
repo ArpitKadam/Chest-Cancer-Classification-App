@@ -3,6 +3,7 @@ from src.exception import CustomException
 from src.components.data_ingestion import DataIngestion
 from src.components.base_model import PrepareBaseModel
 from src.components.model_trainer import ModelTrainer
+from src.components.model_evaluation import ModelEvaluation
 from src.configuration.configuration import AppConfig
 import sys
 import datetime
@@ -49,6 +50,18 @@ class Train:
             training.save_training_metrics()
             print(f"{self.line}>  [{datetime.datetime.now()}] -  Stage {self.c} -  Model Training Completed  {self.line}>")
             logger.info(f"{self.line}>  [{datetime.datetime.now()}] -  Stage {self.c} -  Model Training Completed  {self.line}>")
+
+            self.c += 1
+            print(f"{self.line}>  [{datetime.datetime.now()}] -  Stage {self.c} -  Starting Model Evaluation  {self.line}>")
+            logger.info(f"{self.line}>  [{datetime.datetime.now()}] -  Stage {self.c} -  Starting Model Evaluation  {self.line}>")
+            config = AppConfig()
+            eval_config = config.get_evaluation_config()
+            evaluation = ModelEvaluation(eval_config)
+            evaluation.get_test_data()
+            evaluation.evaluate()
+            evaluation.log_into_mlflow()
+            print(f"{self.line}>  [{datetime.datetime.now()}] -  Stage {self.c} -  Model Evaluation Completed  {self.line}>")
+            logger.info(f"{self.line}>  [{datetime.datetime.now()}] -  Stage {self.c} -  Model Evaluation Completed  {self.line}>")
 
         except Exception as e:
             raise CustomException(e, sys)
