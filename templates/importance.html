@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Importance of AI in Healthcare</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-light: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --bg-dark: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 100%);
+      --text-light: #1a202c;  /* Darker text for better contrast */
+      --text-dark: #f0f0f0;   /* Light text for dark mode */
+      --card-bg-light: rgba(255, 255, 255, 0.95);
+      --card-bg-dark: rgba(30, 30, 30, 0.95);
+      --accent-color: #2d5a27;  /* Darker green for better visibility */
+      --secondary-color: #1565c0;  /* Darker blue */
+      --tertiary-color: #e65100;   /* Darker orange */
+      --quaternary-color: #c2185b; /* Darker pink */
+      --success-color: #2e7d32;
+      --info-color: #1976d2;
+      --warning-color: #f57c00;
+      --danger-color: #d32f2f;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg-light);
+      font-family: 'Inter', sans-serif;
+      color: var(--text-light);
+      transition: all 0.3s ease;
+      scroll-behavior: smooth;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body.dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    /* Animated background particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+      50% { transform: translateY(-20px) rotate(180deg); opacity: 0.8; }
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      color: white;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 20px;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 60px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideUp 1s ease-out 0.3s forwards;
+    }
+
+    @keyframes slideUp {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .main-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 1.3rem;
+      opacity: 0.9;
+      color: white;
+      font-weight: 300;
+    }
+
+    body.dark-mode .subtitle {
+      color: var(--text-dark);
+    }
+
+    .intro-section {
+      background: var(--card-bg-light);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      margin-bottom: 60px;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideUp 1s ease-out 0.6s forwards;
+    }
+
+    .intro-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
+    }
+
+    body.dark-mode .intro-section {
+      background: var(--card-bg-dark);
+      color: var(--text-dark);
+    }
+
+    .intro-section p {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 20px;
+      text-align: justify;
+    }
+
+    .intro-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    .cards-section {
+      margin-bottom: 60px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 40px;
+      color: white;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideUp 1s ease-out 0.9s forwards;
+    }
+
+    body.dark-mode .section-title {
+      color: var(--text-dark);
+    }
+
+    .flip-card {
+      background-color: transparent;
+      width: 100%;
+      height: 320px;
+      perspective: 1000px;
+      margin-bottom: 30px;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideUp 1s ease-out forwards;
+    }
+
+    .flip-card:nth-child(1) { animation-delay: 1.2s; }
+    .flip-card:nth-child(2) { animation-delay: 1.4s; }
+    .flip-card:nth-child(3) { animation-delay: 1.6s; }
+    .flip-card:nth-child(4) { animation-delay: 1.8s; }
+    .flip-card:nth-child(5) { animation-delay: 2.0s; }
+    .flip-card:nth-child(6) { animation-delay: 2.2s; }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }
+
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .flip-card-front {
+      background: var(--card-bg-light);
+      backdrop-filter: blur(20px);
+      color: var(--text-light);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    body.dark-mode .flip-card-front {
+      background: var(--card-bg-dark);
+      color: var(--text-dark);
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+      color: white;
+    }
+
+    .flip-card:nth-child(1) .flip-card-back {
+      background: linear-gradient(135deg, var(--success-color), #1b5e20);
+    }
+
+    .flip-card:nth-child(2) .flip-card-back {
+      background: linear-gradient(135deg, var(--info-color), #0d47a1);
+    }
+
+    .flip-card:nth-child(3) .flip-card-back {
+      background: linear-gradient(135deg, var(--warning-color), #e65100);
+    }
+
+    .flip-card:nth-child(4) .flip-card-back {
+      background: linear-gradient(135deg, var(--danger-color), #b71c1c);
+    }
+
+    .flip-card:nth-child(5) .flip-card-back {
+      background: linear-gradient(135deg, #7b1fa2, #4a148c);
+    }
+
+    .flip-card:nth-child(6) .flip-card-back {
+      background: linear-gradient(135deg, #00695c, #004d40);
+    }
+
+    .card-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      opacity: 0.9;
+    }
+
+    .flip-card:nth-child(1) .card-icon {
+      color: var(--success-color);
+    }
+
+    .flip-card:nth-child(2) .card-icon {
+      color: var(--info-color);
+    }
+
+    .flip-card:nth-child(3) .card-icon {
+      color: var(--warning-color);
+    }
+
+    .flip-card:nth-child(4) .card-icon {
+      color: var(--danger-color);
+    }
+
+    .flip-card:nth-child(5) .card-icon {
+      color: #7b1fa2;
+    }
+
+    .flip-card:nth-child(6) .card-icon {
+      color: #00695c;
+    }
+
+    .flip-card-back .card-icon {
+      color: white;
+    }
+
+    .flip-card-title {
+      font-weight: 700;
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+
+    .flip-card-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+
+    .navigation-section {
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideUp 1s ease-out 2.4s forwards;
+    }
+
+    .btn-custom {
+      padding: 15px 30px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 50px;
+      border: 2px solid;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      margin: 0 10px;
+    }
+
+    .btn-custom::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn-custom:hover::before {
+      left: 100%;
+    }
+
+    .btn-home {
+      background: transparent;
+      color: white;
+      border-color: white;
+    }
+
+    .btn-home:hover {
+      background: white;
+      color: var(--text-light);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(255, 255, 255, 0.3);
+      text-decoration: none;
+    }
+
+    .btn-predict {
+      background: linear-gradient(135deg, var(--success-color), #1b5e20);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 8px 25px rgba(46, 125, 50, 0.4);
+    }
+
+    .btn-predict:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(46, 125, 50, 0.6);
+      color: white;
+      text-decoration: none;
+    }
+
+    body.dark-mode .btn-home {
+      color: var(--text-dark);
+      border-color: var(--text-dark);
+    }
+
+    body.dark-mode .btn-home:hover {
+      background: var(--text-dark);
+      color: var(--text-light);
+    }
+
+    /* Stats section */
+    .stats-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin: 60px 0;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideUp 1s ease-out 1.0s forwards;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 30px 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--success-color);
+      margin-bottom: 10px;
+    }
+
+    .stat-label {
+      font-size: 1rem;
+      opacity: 0.9;
+      color: white;
+    }
+
+    body.dark-mode .stat-label {
+      color: var(--text-dark);
+    }
+
+    /* Research Links Section */
+    .research-section {
+      background: var(--card-bg-light);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      margin: 60px 0;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: slideUp 1s ease-out 2.0s forwards;
+    }
+
+    .research-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--info-color), var(--success-color));
+    }
+
+    body.dark-mode .research-section {
+      background: var(--card-bg-dark);
+      color: var(--text-dark);
+    }
+
+    .research-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .research-link {
+      display: block;
+      padding: 20px;
+      background: rgba(25, 118, 210, 0.1);
+      border-radius: 12px;
+      border-left: 4px solid var(--info-color);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+    }
+
+    .research-link:hover {
+      background: rgba(25, 118, 210, 0.2);
+      transform: translateX(5px);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .research-link-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: var(--info-color);
+    }
+
+    .research-link-desc {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      line-height: 1.5;
+    }
+
+    .research-link-source {
+      font-size: 0.8rem;
+      opacity: 0.6;
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+      .main-title {
+        font-size: 2.5rem;
+      }
+      
+      .container {
+        padding: 40px 20px;
+      }
+      
+      .intro-section, .research-section {
+        padding: 30px 20px;
+      }
+      
+      .flip-card {
+        height: 280px;
+      }
+      
+      .btn-custom {
+        width: 100%;
+        max-width: 300px;
+        margin: 10px 0;
+      }
+      
+      .navigation-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .research-links {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Loading animation */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+
+    .loading-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loader"></div>
+  </div>
+
+  <!-- Animated Background Particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Theme Toggle -->
+  <button class="btn theme-toggle" id="toggleTheme">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <div class="container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1 class="main-title">
+        <i class="fas fa-robot" style="color: #e74c3c;"></i>
+        AI in Healthcare
+      </h1>
+      <p class="subtitle">Transforming Medicine Through Artificial Intelligence & Machine Learning</p>
+    </div>
+
+    <!-- Introduction Section -->
+    <div class="intro-section">
+      <p>
+        <i class="fas fa-heartbeat" style="color: var(--success-color); margin-right: 10px;"></i>
+        <strong>Artificial Intelligence is fundamentally transforming healthcare</strong> by enabling precision medicine, accelerating drug discovery, improving diagnostic accuracy, and enhancing patient outcomes. According to recent studies, AI applications in healthcare could save the industry up to $150 billion annually by 2026 through improved efficiency and reduced medical errors.
+      </p>
+      <p>
+        <i class="fas fa-x-ray" style="color: var(--info-color); margin-right: 10px;"></i>
+        <strong>Medical imaging powered by AI</strong> has achieved remarkable breakthroughs, with deep learning models now capable of detecting diseases like cancer, diabetic retinopathy, and pneumonia with accuracy rates often exceeding human specialists. Our chest cancer classification system exemplifies this advancement, utilizing convolutional neural networks trained on thousands of medical images.
+      </p>
+      <p>
+        <i class="fas fa-microscope" style="color: var(--warning-color); margin-right: 10px;"></i>
+        <strong>The integration of AI in clinical workflows</strong> extends beyond diagnosis to treatment planning, drug discovery, personalized medicine, and population health management. Machine learning algorithms analyze vast datasets to identify patterns invisible to human observation, leading to breakthrough discoveries and more effective treatments.
+      </p>
+      <p>
+        <i class="fas fa-globe" style="color: var(--danger-color); margin-right: 10px;"></i>
+        <strong>Global healthcare accessibility</strong> is being revolutionized through AI-powered telemedicine, remote monitoring systems, and mobile health applications. These technologies are particularly crucial in underserved regions where specialist expertise is limited, democratizing access to high-quality healthcare worldwide.
+      </p>
+    </div>
+
+    <!-- Statistics Section -->
+    <div class="stats-section">
+      <div class="stat-card">
+        <div class="stat-number">73%</div>
+        <div class="stat-label">Diagnostic Accuracy in Radiology</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">50%</div>
+        <div class="stat-label">Reduction in Drug Discovery Time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">$50B</div>
+        <div class="stat-label">Potential Annual Savings</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">30%</div>
+        <div class="stat-label">Improvement in Treatment Outcomes</div>
+      </div>
+    </div>
+
+    <!-- Cards Section -->
+    <div class="cards-section">
+      <h2 class="section-title">AI Applications in Modern Healthcare</h2>
+      
+      <div class="row">
+        <div class="col-md-4">
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <div>
+                  <div class="card-icon">
+                    <i class="fas fa-search-plus"></i>
+                  </div>
+                  <div class="flip-card-title">Medical Imaging & Diagnostics</div>
+                  <div class="flip-card-text">AI-powered image analysis for early detection of cancer, fractures, and other conditions with superhuman accuracy.</div>
+                </div>
+              </div>
+              <div class="flip-card-back">
+                <div>
+                  <div class="card-icon">
+                    <i class="fas fa-bullseye"></i>
+                  </div>
+                  <div class="flip-card-title">Precision Medicine</div>
+                  <div class="flip-card-text">Personalized treatment plans based on genetic profiles, medical history, and real-time health data analysis.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <div>
+                  <div class="card-icon">
+                    <i class="fas fa-pills"></i>
+                  </div>
+                  <div class="flip-card-title">Drug Discovery & Development</div>
+                  <div class="flip-card-text">Accelerating pharmaceutical research through molecular modeling and predictive analytics.</div>
+                </div>
+              </div>
+              <div class="flip-card-back">
+                <div>
+                  <div class="card-icon">
+                    <i class="fas fa-flask"></i>
+                  </div>
+                  <div class="flip-card-title">Clinical Trial Optimization</div>
+                  <div class="flip-card-text">AI algorithms optimize patient recruitment, predict trial outcomes, and identify potential adverse effects.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <div>
+                  <div class="card-icon">
+                    <i class="fas fa-wifi"></i>
+                  </div>
+                  <div class="flip-card-title">Remote Patient Monitoring</div>
+                  <div class="flip-card-text">IoT devices and wearables continuously track vital signs and predict health emergencies.</div>
+                </div>
+              </div>
+              <div class="flip-card-back">
+                <div>
+                  <div class="card-icon">
+                    <i class="fas fa-chart-line"></i>
+                  </div>
+                  <div class="flip-card-title">Predictive Analytics</div>
+                  <div class="flip-card-text">Machine learning models predict disease outbreaks, patient deterioration, and treatment responses.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <div>
+                  <div class="card-icon">
+                    <i class="fas fa-robot"></i>
+                  </div>
+                  <div class="flip-card-title">Robotic Surgery</div>
+                  <div class="flip-card-text">AI-assisted surgical robots perform minimally invasive procedures with enhanced precision.</div>
+                </div>
+              </div>
+              <div class="flip-card-back">
+                <div>
+                  <div class="card-icon">
+                    <i class="fas fa-hand-holding-medical"></i>
+                  </div>
+                  <div class="flip-card-title">Surgical Planning</div>
+                  <div class="flip-card-text">3D modeling and simulation help surgeons plan complex procedures and reduce operative risks.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <div>
+                  <div class="card-icon">
+                    <i class="fas fa-comments"></i>
+                  </div>
+                  <div class="flip-card-title">Virtual Health Assistants</div>
+                  <div class="flip-card-text">AI chatbots provide 24/7 patient support, symptom checking, and medication reminders.</div>
+                </div>
+              </div>
+              <div class="flip-card-back">
+                <div>
+                  <div class="card-icon">
+                    <i class="fas fa-brain"></i>
+                  </div>
+                  <div class="flip-card-title">Mental Health Support</div>
+                  <div class="flip-card-text">AI-powered therapy apps and mood tracking systems support mental health treatment and monitoring.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <div>
+                  <div class="card-icon">
+                    <i class="fas fa-dna"></i>
+                  </div>
+                  <div class="flip-card-title">Genomics & Bioinformatics</div>
+                  <div class="flip-card-text">AI analyzes genetic data to understand disease mechanisms and develop targeted therapies.</div>
+                </div>
+              </div>
+              <div class="flip-card-back">
+                <div>
+                  <div class="card-icon">
+                    <i class="fas fa-microscope"></i>
+                  </div>
+                  <div class="flip-card-title">Pathology Analysis</div>
+                  <div class="flip-card-text">Digital pathology systems use AI to analyze tissue samples and detect cellular abnormalities.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Research Links Section -->
+    <div class="research-section">
+      <h3 style="color: var(--info-color); margin-bottom: 20px; text-align: center;">
+        <i class="fas fa-graduation-cap"></i> Research & Resources
+      </h3>
+      <p style="text-align: center; margin-bottom: 30px;">
+        Explore cutting-edge research and authoritative sources on AI in healthcare from leading institutions and publications.
+      </p>
+      
+      <div class="research-links">
+        <a href="https://www.nature.com/articles/s41591-018-0300-7" target="_blank" class="research-link">
+          <div class="research-link-title">Deep learning for healthcare: review, opportunities and challenges</div>
+          <div class="research-link-desc">Comprehensive review of deep learning applications in healthcare, covering medical imaging, drug discovery, and clinical decision support.</div>
+          <div class="research-link-source">Nature Medicine - 2019</div>
+        </a>
+
+        <a href="https://pubmed.ncbi.nlm.nih.gov/32871313/" target="_blank" class="research-link">
+          <div class="research-link-title">Artificial intelligence in healthcare: past, present and future</div>
+          <div class="research-link-desc">Analysis of AI's evolution in healthcare and its potential to transform medical practice and patient outcomes.</div>
+          <div class="research-link-source">PubMed - Stroke and Vascular Neurology</div>
+        </a>
+
+        <a href="https://www.who.int/publications/i/item/9789240029200" target="_blank" class="research-link">
+          <div class="research-link-title">WHO Ethics and Governance of AI for Health</div>
+          <div class="research-link-desc">World Health Organization's comprehensive guidance on ethical considerations and governance frameworks for AI in healthcare.</div>
+          <div class="research-link-source">World Health Organization - 2021</div>
+        </a>
+
+        <a href="https://www.nejm.org/doi/full/10.1056/NEJMra1814259" target="_blank" class="research-link">
+          <div class="research-link-title">Artificial Intelligence in Healthcare</div>
+          <div class="research-link-desc">Comprehensive overview of AI applications in clinical practice, including diagnostic imaging, drug development, and personalized medicine.</div>
+          <div class="research-link-source">New England Journal of Medicine - 2019</div>
+        </a>
+
+        <a href="https://www.mckinsey.com/industries/healthcare-systems-and-services/our-insights/transforming-healthcare-with-ai" target="_blank" class="research-link">
+          <div class="research-link-title">Transforming healthcare with AI</div>
+          <div class="research-link-desc">McKinsey's analysis of AI's potential to create $100 billion in annual savings for US healthcare through improved outcomes and efficiency.</div>
+          <div class="research-link-source">McKinsey & Company - 2022</div>
+        </a>
+
+        <a href="https://www.fda.gov/medical-devices/software-medical-device-samd/artificial-intelligence-and-machine-learning-software-medical-device" target="_blank" class="research-link">
+          <div class="research-link-title">FDA AI/ML-Based Medical Device Guidance</div>
+          <div class="research-link-desc">US FDA's regulatory framework and guidelines for AI/ML-based medical devices and software.</div>
+          <div class="research-link-source">U.S. Food and Drug Administration</div>
+        </a>
+
+        <a href="https://www.ibm.com/watson-health" target="_blank" class="research-link">
+          <div class="research-link-title">IBM Watson Health</div>
+          <div class="research-link-desc">Leading AI platform for healthcare, offering solutions for clinical decision support, drug discovery, and population health management.</div>
+          <div class="research-link-source">IBM Corporation</div>
+        </a>
+
+        <a href="https://ai.googleblog.com/search/label/Medical%20Imaging" target="_blank" class="research-link">
+          <div class="research-link-title">Google AI Medical Imaging Research</div>
+          <div class="research-link-desc">Google's breakthrough research in medical imaging AI, including diabetic retinopathy detection and cancer screening.</div>
+          <div class="research-link-source">Google AI Blog</div>
+        </a>
+
+        <a href="https://www.microsoft.com/en-us/research/project/medical-ai/" target="_blank" class="research-link">
+          <div class="research-link-title">Microsoft Healthcare AI Research</div>
+          <div class="research-link-desc">Microsoft's research initiatives in healthcare AI, focusing on precision medicine, clinical decision support, and health equity.</div>
+          <div class="research-link-source">Microsoft Research</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Navigation Section -->
+    <div class="navigation-section">
+      <a href="/" class="btn-custom btn-home">
+        <i class="fas fa-home"></i>
+        Back to Home
+      </a>
+      <a href="/predict-page" class="btn-custom btn-predict">
+        <i class="fas fa-microscope"></i>
+        Try AI Diagnosis
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Loading animation
+    window.addEventListener('load', function() {
+      setTimeout(() => {
+        document.getElementById('loadingOverlay').classList.add('hidden');
+      }, 1000);
+    });
+
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('toggleTheme');
+    const body = document.body;
+    
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      body.classList.add('dark-mode');
+      themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+
+    themeToggle.addEventListener('click', function() {
+      body.classList.toggle('dark-mode');
+      
+      if (body.classList.contains('dark-mode')) {
+        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        localStorage.setItem('theme', 'light');
+      }
+    });
+
+    // Create animated particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 50;
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    // Initialize particles
+    createParticles();
+
+    // Add hover effects to cards
+    document.querySelectorAll('.flip-card').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'scale(1.02)';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'scale(1)';
+      });
+    });
+
+    // Add click animation to buttons
+    document.querySelectorAll('.btn-custom').forEach(button => {
+      button.addEventListener('click', function(e) {
+        const ripple = document.createElement('span');
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+        
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.classList.add('ripple');
+        
+        this.appendChild(ripple);
+        
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      });
+    });
+
+    // Intersection Observer for scroll animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Observe elements for scroll animations
+    document.querySelectorAll('.flip-card, .stat-card').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

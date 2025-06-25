@@ -5,7 +5,7 @@ stages:
       - src/components/data_ingestion.py
       - config/config.yaml
     outs:
-      - artifacts/data_ingestion
+      - artifacts/data_ingestion/data.zip
 
 
   prepare_base_model:
@@ -28,7 +28,6 @@ stages:
     deps:
       - src/components/model_trainer.py
       - config/config.yaml
-      - artifacts/data_ingestion/Data
       - artifacts/base_model
     params:
       - IMAGE_SIZE
@@ -36,7 +35,7 @@ stages:
       - BATCH_SIZE
       - AUGMENTATION
     outs:
-      - artifacts/model_trainer
+      - artifacts/model_trainer/trained_model.h5
 
 
   evaluation:
@@ -44,7 +43,6 @@ stages:
     deps:
       - src/components/model_evaluation.py
       - config/config.yaml
-      - artifacts/data_ingestion/Data/test
       - artifacts/model_trainer/trained_model.h5
     params:
       - IMAGE_SIZE
