@@ -2,7 +2,7 @@ from src.logger import logger
 from src.exception import CustomException
 from src.constants import CONFIG_FILE_PATH, PARAMS_FILE_PATH
 from src.utils import create_directories, read_yaml
-from src.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig
+from src.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig, ModelTrainerConfig
 from pathlib import Path
 import sys
 
@@ -70,6 +70,40 @@ class AppConfig:
 
             return base_model_config
 
+        except Exception as e:
+            logger.error(e)
+            raise CustomException(e, sys)
+    
+    def get_model_trainer_config(self):
+        try:
+            model_trainer = self.config.model_trainer
+            params = self.params
+            base_model = self.config.base_model_preparation
+
+            create_directories([model_trainer.root_dir])              ### Now always pass path to this function as list
+            logger.info(f"Model Trainer directory created at {model_trainer.root_dir}")
+
+            model_trainer_config = ModelTrainerConfig(
+                root_dir = Path(model_trainer.root_dir),
+                trained_model_path = Path(model_trainer.trained_model_path),
+                updated_base_model_path = Path(base_model.updated_base_model_path),
+                train_data_path= Path(model_trainer.train_data_path),
+                test_data_path= Path(model_trainer.test_data_path),
+                valid_data_path= Path(model_trainer.valid_data_path),
+                augmentation = params.AUGMENTATION,
+                image_size = params.IMAGE_SIZE,
+                epochs = params.EPOCHS,
+                batch_size = params.BATCH_SIZE,
+                train_history_dir = Path(model_trainer.train_history_dir),
+                loss_images_path = Path(model_trainer.loss_images_path),
+                accuracy_images_path = Path(model_trainer.accuracy_images_path),
+                history_json_path = Path(model_trainer.history_json_path)
+
+            )
+            logger.info(f"Model Trainer Config: {model_trainer_config}")
+            
+            return model_trainer_config
+    
         except Exception as e:
             logger.error(e)
             raise CustomException(e, sys)
